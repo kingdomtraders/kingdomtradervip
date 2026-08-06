@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KingdomTraders</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --topbar: #050D18;
+            --nav1: #0F2340;
+            --nav2: #173C63;
+            --title: #16304F;
+            --body: #6D7686;
+            --red: #B13B43;
+            --telegram: #0088cc;
+            --telegram-hover: #0077b3;
+            --border: #D8E0EA;
+            --bg: #EEF3F8;
+            --card-bg: #FFFFFF;
+            --surface: #F8FAFC;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #F5F7FA;
+            color: #111827;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        .page {
+            max-width: 860px;
+            margin: 0 auto;
+            background: #fff;
+            overflow-x: hidden;
+            position: relative;
+            box-shadow: 0 0 80px rgba(16, 24, 40, .07);
+            will-change: transform;
+        }
+
+        .tracking-brand {
+            letter-spacing: -0.04em;
+        }
+
+        .shadow-soft {
+            box-shadow: 0 18px 50px rgba(16, 24, 40, .05);
+        }
+
+        .shadow-card {
+            box-shadow: 0 6px 18px rgba(16, 24, 40, .04);
+            transition: box-shadow .3s;
+        }
+
+        .shadow-card:hover {
+            box-shadow: 0 12px 32px rgba(16, 24, 40, .09);
+        }
+
+        .ticker {
+            overflow: hidden;
+            white-space: nowrap;
+            background: #050D18;
+            padding: 14px 0;
+        }
+
+        .ticker-track {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 42s linear infinite;
+            font-size: 16px;
+            font-weight: 700;
+            color: #D7E1F2;
+            line-height: 1;
+            will-change: transform;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .nav-gradient {
+            background: linear-gradient(90deg, #0F2340, #173C63);
+        }
+
+        .products-grid {
+            display: grid;
+            gap: 28px;
+            margin-top: 40px;
+        }
+
+        .product-card {
+            background: #fff;
+            border: 1px solid #E6ECF2;
+            border-radius: 34px;
+            padding: 22px;
+            box-shadow: 0 8px 24px rgba(16, 24, 40, .04);
+            transition: .35s;
+            will-change: transform;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 44px rgba(16, 24, 40, .10);
+            border-color: #d0d8e2;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 240px;
+            display: block;
+            object-fit: cover;
+            object-position: center center;
+            border-radius: 24px;
+            background: #F8FAFC;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .product-card h3 {
+            font-size: clamp(24px, 3.9vw, 32px);
+            line-height: 1.15;
+            margin-top: 18px;
+            font-weight: 800;
+            color: #16304F;
+            letter-spacing: -0.03em;
+            overflow-wrap: anywhere;
+        }
+
+        .product-price {
+            font-size: clamp(21px, 3vw, 26px);
+            font-weight: 800;
+            color: #B13B43;
+            margin-top: 10px;
+            line-height: 1.1;
+        }
+
+        .product-desc {
+            font-size: clamp(16px, 2.3vw, 20px);
+            line-height: 1.55;
+            color: #6D7686;
+            margin-top: 16px;
+            overflow-wrap: anywhere;
+            font-weight: 500;
+        }
+
+        .perf-block {
+            margin-top: 18px;
+            padding: 14px 16px 12px;
+            border: 1px solid #E6ECF2;
+            border-radius: 22px;
+            background: linear-gradient(180deg, #F8FFFB 0%, #FFFFFF 100%);
+        }
+
+        .perf-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .perf-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #0F8A43;
+        }
+
+        .perf-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, .12);
+            flex-shrink: 0;
+        }
+
+        .perf-meta {
+            font-size: 12px;
+            font-weight: 800;
+            color: #6D7686;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .perf-chart {
+            width: 100%;
+            height: 78px;
+            display: block;
+        }
+
+        .perf-line {
+            stroke: #22c55e;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            filter: drop-shadow(0 6px 10px rgba(34, 197, 94, .18));
+        }
+
+        .perf-area {
+            fill: #22c55e;
+            fill-opacity: .12;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .feature {
+            background: #F8FAFC;
+            border: 1px solid #E6ECF2;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #4B5563;
+        }
+
+        .product-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 28px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            height: 58px;
+            border-radius: 999px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .btn-primary {
+            border: none;
+            background: #B13B43;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            opacity: .93;
+            box-shadow: 0 8px 22px rgba(177, 59, 67, .30);
+        }
+
+        .btn-secondary {
+            border: 1px solid #D8E0EA;
+            background: #fff;
+            color: #16304F;
+        }
+
+        .btn-secondary:hover {
+            background: #F8FAFC;
+            border-color: #c4cdd8;
+        }
+
+        /* FLOATING TELEGRAM – outside .page */
+        .floating-telegram {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            height: 74px;
+            padding: 0 28px;
+            border-radius: 999px;
+            background: #0088cc;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 800;
+            text-decoration: none;
+            z-index: 999;
+            box-shadow: 0 18px 40px rgba(0, 136, 204, .35);
+            animation: glow-telegram 2.2s infinite;
+            transition: transform .25s, box-shadow .25s;
+            will-change: transform, box-shadow;
+        }
+
+        .floating-telegram:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 22px 48px rgba(0, 136, 204, .48);
+        }
+
+        @keyframes glow-telegram {
+            0% { box-shadow: 0 8px 24px rgba(0, 136, 204, .30); }
+            50% { box-shadow: 0 16px 40px rgba(0, 136, 204, .52); }
+            100% { box-shadow: 0 8px 24px rgba(0, 136, 204, .30); }
+        }
+
+        .section-title {
+            font-size: clamp(28px, 5vw, 48px);
+            line-height: 1.12;
+        }
+
+        .section-lead {
+            font-size: clamp(18px, 3vw, 28px);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .hero-title {
+            font-size: clamp(34px, 6vw, 52px);
+            line-height: 1.08;
+        }
+
+        .hero-lead {
+            font-size: clamp(18px, 3vw, 28px);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .nav-link {
+            font-size: clamp(18px, 3vw, 28px);
+            line-height: 1.15;
+            transition: color .2s;
+        }
+
+        .nav-link:hover {
+            color: #B13B43;
+        }
+
+        .mini-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 14px;
+            background: #F8FAFC;
+            border: 1px solid #E6ECF2;
+            color: #6D7686;
+        }
+
+        /* Testimonial card with Telegram pill */
+        .testimonial-card {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #E6ECF2;
+            box-shadow: 0 6px 18px rgba(16, 24, 40, .04);
+            background: #F8FAFC;
+        }
+
+        .testimonial-card img {
+            display: block;
+            width: 100%;
+        }
+
+        .telegram-source-pill {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 136, 204, 0.92);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+        }
+
+        .telegram-source-pill svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 13, 24, .72);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 18px;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(820px, 100%);
+            max-height: min(88vh, 900px);
+            overflow: auto;
+            background: #fff;
+            border-radius: 28px;
+            border: 1px solid #E6ECF2;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
+        }
+
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            border-bottom: 1px solid #E6ECF2;
+            z-index: 2;
+        }
+
+        .modal-body p,
+        .modal-body li {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .modal-body h3 {
+            font-size: 18px;
+            line-height: 1.3;
+            color: #16304F;
+            font-weight: 800;
+        }
+
+        .filter-pill {
+            border: 1px solid #E6ECF2;
+            background: #F8FAFC;
+            color: #6D7686;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+            user-select: none;
+        }
+
+        .filter-pill:hover {
+            background: #eef1f5;
+            border-color: #cdd4de;
+        }
+
+        .filter-pill.active {
+            background: #F6E9EA;
+            border-color: #E9C7CB;
+            color: #B13B43;
+            box-shadow: 0 2px 8px rgba(177, 59, 67, .08);
+        }
+
+        .select-wrap {
+            height: 60px;
+            border-radius: 20px;
+            background: #F8FAFC;
+            border: 1px solid #E6ECF2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 18px;
+            font-size: 16px;
+            color: #6D7686;
+            gap: 12px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .select-wrap:hover {
+            border-color: #cdd4de;
+        }
+
+        .select-wrap select {
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .search-box {
+            height: 60px;
+            border-radius: 20px;
+            background: #F8FAFC;
+            border: 1px solid #E6ECF2;
+            display: flex;
+            align-items: center;
+            padding: 0 18px;
+            color: #6D7686;
+            gap: 14px;
+            transition: .2s;
+        }
+
+        .search-box:focus-within {
+            border-color: #B13B43;
+            box-shadow: 0 0 0 3px rgba(177, 59, 67, .06);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-size: 17px;
+            color: #16304F;
+            font-weight: 600;
+        }
+
+        .search-box input::placeholder {
+            color: #a0aab4;
+            font-weight: 500;
+        }
+
+        .hidden-card {
+            display: none !important;
+        }
+
+        .buy-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        .pay-card {
+            background: #fff;
+            border: 1px solid #E6ECF2;
+            border-radius: 28px;
+            padding: 24px;
+            transition: .25s;
+        }
+
+        .pay-card:hover {
+            border-color: #cdd4de;
+            box-shadow: 0 4px 16px rgba(16, 24, 40, .04);
+        }
+
+        .copy-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #E6ECF2;
+            background: #F8FAFC;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #16304F;
+            cursor: pointer;
+            transition: .2s;
+            user-select: none;
+        }
+
+        .copy-chip:hover {
+            background: #eef1f5;
+            border-color: #B13B43;
+            color: #B13B43;
+        }
+
+        .copy-chip.copied {
+            background: #e9f7ef;
+            border-color: #0F8A43;
+            color: #0F8A43;
+        }
+
+        @media (max-width: 768px) {
+            .nav-link { font-size: 18px; }
+            .product-actions { grid-template-columns: 1fr; }
+            .floating-telegram {
+                height: 60px;
+                padding: 0 18px;
+                font-size: 17px;
+                right: 14px;
+                bottom: 14px;
+                gap: 8px;
+            }
+            .product-card h3 { font-size: 24px; }
+            .select-wrap,
+            .search-box {
+                height: 54px;
+                font-size: 15px;
+            }
+            .search-box input { font-size: 15px; }
+            .buy-grid { gap: 14px; }
+            .product-image { height: 180px; object-position: center center; }
+            .perf-chart { height: 72px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <!-- TICKER -->
+        <div class="ticker">
+            <div class="ticker-track">
+                Live Markets&nbsp;&nbsp; XAUUSD $4491.21 ▲ &nbsp;&nbsp; XAUZAR R74,979 ▲ &nbsp;&nbsp; EURUSD 1.16490 ● &nbsp;&nbsp; GBPUSD 1.34119 ● &nbsp;&nbsp; USDZAR 16.5937 ● &nbsp;&nbsp; GBPZAR 22.2553 ● &nbsp;&nbsp; EURZAR 19.3301 ● &nbsp;&nbsp; BTCUSD $76,853 ▼
+                &nbsp;&nbsp;
+                Live Markets&nbsp;&nbsp; XAUUSD $4491.21 ▲ &nbsp;&nbsp; XAUZAR R74,979 ▲ &nbsp;&nbsp; EURUSD 1.16490 ● &nbsp;&nbsp; GBPUSD 1.34119 ● &nbsp;&nbsp; USDZAR 16.5937 ● &nbsp;&nbsp; GBPZAR 22.2553 ● &nbsp;&nbsp; EURZAR 19.3301 ● &nbsp;&nbsp; BTCUSD $76,853 ▼
+            </div>
+        </div>
+
+        <!-- TOP NAV BAR -->
+        <div class="nav-gradient h-[104px] px-6 flex items-center justify-between text-white">
+            <div class="flex items-center gap-6 text-[17px] font-semibold flex-wrap">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="zap"></i>
+                    <span>Live FX</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shield-check"></i>
+                    <span>Secure</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="message-circle"></i>
+                    <span>Support</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- HEADER -->
+        <header class="px-6 pt-10 pb-4 bg-white">
+            <div class="flex items-center gap-4 flex-wrap">
+                <img src="assets/logo.png" alt="KingdomTraders Logo" class="w-[58px] h-[58px] object-contain flex-shrink-0" loading="eager" />
+                <div class="min-w-0 flex-1">
+                    <div class="text-[clamp(30px,6vw,48px)] font-black tracking-brand leading-[1.15] break-words">
+                        <span class="text-[#16304F]">Kingdom</span><span class="text-[#B13B43]">Traders</span>
+                    </div>
+                    <div class="tracking-[0.20em] uppercase text-[#9099A8] mt-1 text-[11px] sm:text-[13px] font-semibold">
+                        institutional automation
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex flex-wrap gap-6 mt-10 text-[#2C3E57] font-semibold items-center">
+                <a href="#catalog" class="border-b-4 border-[#B13B43] pb-2 nav-link">Trading Bots</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <button id="openLegal" type="button" class="inline-flex items-center gap-3 rounded-full border-2 px-6 py-4 text-[#B13B43] bg-[#FAF0F1] border-[#E9C7CB] text-[17px] sm:text-[22px] font-bold hover:bg-[#fdf5f5] hover:border-[#dba7ad] transition-all shadow-sm hover:shadow-md">
+                    <i data-lucide="shield-check"></i>
+                    Legal &amp; Risk
+                </button>
+            </nav>
+        </header>
+
+        <!-- HERO -->
+        <section class="px-6 pt-14 pb-12 bg-[#EEF3F8]">
+            <div class="rounded-[40px] bg-white p-8 shadow-soft border border-[#E6ECF2]/70">
+                <div class="mx-auto w-fit rounded-full bg-[#F6E9EA] px-6 py-4 text-[#B13B43] font-semibold flex gap-3 items-center text-[14px] sm:text-[18px]">
+                    <i data-lucide="bot"></i>
+                    <span>AI-powered trading infrastructure</span>
+                </div>
+
+                <h1 class="mt-10 text-center text-[#16304F] hero-title font-black tracking-brand">
+                    Elite trading bots for forex &amp; automated markets
+                </h1>
+
+                <p class="mt-8 text-center text-[#6D7686] hero-lead max-w-[620px] mx-auto">
+                    Institutional-grade automated strategies with clear product information and a streamlined buying experience.
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-5 mt-10">
+                    <a href="#catalog">
+                        <button class="bg-[#B13B43] text-white h-[70px] px-10 rounded-full text-[19px] sm:text-[22px] font-bold hover:opacity-[.93] transition-all hover:shadow-lg hover:shadow-red-900/20">
+                            Browse bots
+                        </button>
+                    </a>
+                    <a href="#contact" class="bg-[#0088cc] text-white h-[70px] px-10 rounded-full text-[19px] sm:text-[22px] font-bold flex items-center gap-3 hover:opacity-[.93] transition-all hover:shadow-lg hover:shadow-blue-500/25">
+                        <img src="assets/icon.jpg" class="w-[34px] h-[34px] rounded-full object-cover flex-shrink-0" alt="Icon" loading="eager" />
+                        Contact Us
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-12">
+                    <div class="bg-white border border-[#E6ECF2] rounded-[28px] h-[160px] flex flex-col justify-center items-center shadow-card">
+                        <div class="text-[34px] font-bold text-[#16304F]">7</div>
+                        <div class="text-[#6D7686] text-[19px] sm:text-[21px] font-semibold">Premium bots</div>
+                    </div>
+                    <div class="bg-white border border-[#E6ECF2] rounded-[28px] h-[160px] flex flex-col justify-center items-center shadow-card">
+                        <div class="text-[34px] font-bold text-[#16304F]">24/7</div>
+                        <div class="text-[#6D7686] text-[19px] sm:text-[21px] font-semibold">Automation</div>
+                    </div>
+                    <div class="bg-white border border-[#E6ECF2] rounded-[28px] h-[160px] flex flex-col justify-center items-center shadow-card">
+                        <div class="text-[34px] font-bold text-[#16304F]">Secure</div>
+                        <div class="text-[#6D7686] text-[19px] sm:text-[21px] font-semibold">Checkout</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATALOG (unchanged) -->
+        <section id="catalog" class="px-6 py-16 bg-[#EEF3F8] scroll-mt-6">
+            <h2 class="section-title font-black text-[#16304F] tracking-brand">Trading bot catalog</h2>
+            <p class="mt-4 text-[#6D7686] section-lead">
+                Explore our collection of automated trading systems for forex, indices, commodities, and portfolio risk management.
+            </p>
+
+            <div class="mt-10 bg-white rounded-[34px] p-5 shadow-soft border border-[#E6ECF2]">
+                <div class="search-box">
+                    <i data-lucide="search"></i>
+                    <input id="searchInput" type="text" placeholder="Search bots..." aria-label="Search bots">
+                </div>
+
+                <div class="select-wrap mt-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="layers-3"></i>
+                        <select id="categorySelect" class="bg-transparent outline-none font-semibold text-[#16304F] w-full">
+                            <option value="all">All categories</option>
+                            <option value="mobile">Mobile Bot</option>
+                            <option value="bundle">Bundle</option>
+                            <option value="indicator">Indicator</option>
+                            <option value="strategy">Strategy</option>
+                        </select>
+                    </div>
+                    <i data-lucide="chevron-down" class="flex-shrink-0"></i>
+                </div>
+
+                <div class="flex flex-wrap gap-3 mt-4 text-[14px] sm:text-[15px] font-semibold">
+                    <button class="filter-pill active" data-category="all">All</button>
+                    <button class="filter-pill" data-category="mobile">Mobile Bot</button>
+                    <button class="filter-pill" data-category="bundle">Bundle</button>
+                    <button class="filter-pill" data-category="indicator">Indicator</button>
+                    <button class="filter-pill" data-category="strategy">Strategy</button>
+                </div>
+
+                <div class="select-wrap mt-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="arrow-down-up"></i>
+                        <select id="sortSelect" class="bg-transparent outline-none font-semibold text-[#16304F] w-full">
+                            <option value="featured">Sort: Featured</option>
+                            <option value="price-asc">Price: Low to high</option>
+                            <option value="price-desc">Price: High to low</option>
+                            <option value="name-asc">Name: A to Z</option>
+                        </select>
+                    </div>
+                    <i data-lucide="chevron-down" class="flex-shrink-0"></i>
+                </div>
+            </div>
+
+            <div id="productsGrid" class="products-grid">
+                <div class="product-card" data-name="KT No Sleep EA V1" data-price="111" data-category="strategy" data-original-index="0">
+                    <img src="assets/bot1.jpg" class="product-image" alt="KT No Sleep EA V1" loading="lazy" decoding="async">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <div class="badge bg-[#1E2C43] text-white">Hot Seller</div>
+                        <div class="badge bg-[#E3F2FD] text-[#1565C0]"><i data-lucide="monitor" class="w-4 h-4"></i> PC Bot</div>
+                    </div>
+                    <h3>KT No Sleep EA V1</h3>
+                    <div class="product-price">$111.11</div>
+                    <p class="product-desc">Quick-scalping MT4 bot that trades around the clock — no rest, no manual watching.</p>
+                    <div class="feature-list">
+                        <div class="feature">MT4 Platform</div>
+                        <div class="feature">Quick Scalping</div>
+                        <div class="feature">Runs 24/5</div>
+                        <div class="feature">Fully Automated</div>
+                        <div class="feature">Verified on Myfxbook</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary buy-now-btn" data-product="KT No Sleep EA V1" data-price="$111.11" data-category="Strategy">Buy Now</button>
+                        <button class="btn-secondary details-btn" data-product="KT No Sleep EA V1">View details</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-name="KT AMG 90% Winrate System" data-price="83" data-category="indicator" data-original-index="1">
+                    <img src="assets/bot2.jpg" class="product-image" alt="KT AMG 90% Winrate System" loading="lazy" decoding="async">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <div class="badge bg-[#F6E9EA] text-[#B13B43]">indicator</div>
+                        <div class="badge bg-[#E3F2FD] text-[#1565C0]"><i data-lucide="monitor" class="w-4 h-4"></i> PC Bot</div>
+                    </div>
+                    <h3>KT AMG 90% Winrate System</h3>
+                    <div class="product-price">$83.33</div>
+                    <p class="product-desc">Accurate forex trading system with price action buy/sell arrows, trendlines, TP &amp; SL levels.</p>
+                    <div class="feature-list">
+                        <div class="feature">Price Action</div>
+                        <div class="feature">Buy &amp; Sell Arrows</div>
+                        <div class="feature">Auto Trendlines</div>
+                        <div class="feature">TP &amp; SL Levels</div>
+                        <div class="feature">90% Win Rate</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary buy-now-btn" data-product="KT AMG 90% Winrate System" data-price="$83.33" data-category="Indicator">Buy Now</button>
+                        <button class="btn-secondary details-btn" data-product="KT AMG 90% Winrate System">View details</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-name="KT Pocket Trader Pro 2.0" data-price="47" data-category="mobile" data-original-index="2">
+                    <img src="assets/bot3.jpg" class="product-image" alt="KT Pocket Trader Pro 2.0" loading="lazy" decoding="async">
+                    <div class="badge bg-[#E9F7EF] text-[#0F8A43]"><i data-lucide="smartphone" class="w-4 h-4"></i> Mobile Bot</div>
+                    <h3>KT POCKET TRADER PRO 2.0</h3>
+                    <div class="product-price">$47.22</div>
+                    <p class="product-desc">Advanced mobile trading bot for traders on the go.</p>
+                    <div class="feature-list">
+                        <div class="feature">Mobile version</div>
+                        <div class="feature">Easy setup</div>
+                        <div class="feature">Smart execution</div>
+                        <div class="feature">User-friendly</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary buy-now-btn" data-product="KT POCKET TRADER PRO 2.0" data-price="$47.22" data-category="Mobile Bot">Buy Now</button>
+                        <button class="btn-secondary details-btn" data-product="KT POCKET TRADER PRO 2.0">View details</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-name="1 Min Gold Scalper" data-price="69" data-category="strategy" data-original-index="3">
+                    <img src="assets/bot4.jpg" class="product-image" alt="1 Min Gold Scalper" loading="lazy" decoding="async">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <div class="badge bg-[#FFF7E8] text-[#B7791F]">Gold Scalper</div>
+                        <div class="badge bg-[#E3F2FD] text-[#1565C0]"><i data-lucide="monitor" class="w-4 h-4"></i> PC Bot</div>
+                    </div>
+                    <h3>1 Min Gold Scalper</h3>
+                    <div class="product-price">$69.44</div>
+                    <p class="product-desc">Fast gold scalper built for the 1 minute timeframe.</p>
+                    <div class="feature-list">
+                        <div class="feature">1 Min timeframe</div>
+                        <div class="feature">Gold focused</div>
+                        <div class="feature">Fast entries</div>
+                        <div class="feature">MT4 &amp; MT5</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary buy-now-btn" data-product="1 Min Gold Scalper" data-price="$69.44" data-category="Strategy">Buy Now</button>
+                        <button class="btn-secondary details-btn" data-product="1 Min Gold Scalper">View details</button>
+                    </div>
+                </div>
+
+                <!-- KT All-In-One Package – Best Value + Mobile + PC pills -->
+                <div class="product-card" data-name="KT All-In-One Package" data-price="292" data-category="bundle" data-original-index="4">
+                    <img src="assets/bot5.jpg" class="product-image" alt="KT All-In-One Package" loading="lazy" decoding="async">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <div class="badge bg-[#EEF2FF] text-[#4338CA]">Best Value</div>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <div class="badge bg-[#E9F7EF] text-[#0F8A43]"><i data-lucide="smartphone" class="w-4 h-4"></i> Mobile Bot</div>
+                        <div class="badge bg-[#E3F2FD] text-[#1565C0]"><i data-lucide="monitor" class="w-4 h-4"></i> PC Bot</div>
+                    </div>
+                    <h3>KT All-In-One Package</h3>
+                    <div class="product-price">$291.67</div>
+                    <p class="product-desc">Complete KingdomTraders package with multiple premium products.</p>
+                    <div class="feature-list">
+                        <div class="feature">Complete package</div>
+                        <div class="feature">Best value</div>
+                        <div class="feature">Multiple tools</div>
+                        <div class="feature">Premium access</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary buy-now-btn" data-product="KT All-In-One Package" data-price="$291.67" data-category="Bundle">Buy Now</button>
+                        <button class="btn-secondary details-btn" data-product="KT All-In-One Package">View details</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-name="KT SMC System" data-price="50" data-category="indicator" data-original-index="5">
+                    <img src="assets/bot6.jpg" class="product-image" alt="KT SMC System" loading="lazy" decoding="async">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <div class="badge bg-[#F6E9EA] text-[#B13B43]">Indicator</div>
+                        <div class="badge bg-[#E3F2FD] text-[#1565C0]"><i data-lucide="monitor" class="w-4 h-4"></i> PC Bot</div>
+                    </div>
+                    <h3>KT SMC System</h3>
+                    <div class="product-price">$50.00</div>
+                    <p class="product-desc">SMC trading system with structured entries.</p>
+                    <div class="feature-list">
+                        <div class="feature">SMC based</div>
+                        <div class="feature">Structured entries</div>
+                        <div class="feature">MT5 ready</div>
+                        <div class="feature">Trading guidance</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary buy-now-btn" data-product="KT SMC System" data-price="$50.00" data-category="Indicator">Buy Now</button>
+                        <button class="btn-secondary details-btn" data-product="KT SMC System">View details</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-name="KingdomTraders Gold Strategy" data-price="92" data-category="strategy" data-original-index="6">
+                    <img src="assets/bot7.jpg" class="product-image" alt="KingdomTraders Gold Strategy" loading="lazy" decoding="async">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <div class="badge bg-[#FFF7E8] text-[#B7791F]">PDF Strategy</div>
+                        <div class="badge bg-[#E3F2FD] text-[#1565C0]"><i data-lucide="monitor" class="w-4 h-4"></i> PC Bot</div>
+                    </div>
+                    <h3>KingdomTraders Gold Strategy</h3>
+                    <div class="product-price">$91.67</div>
+                    <p class="product-desc">Gold strategy package with teachings.</p>
+                    <div class="feature-list">
+                        <div class="feature">Gold strategy</div>
+                        <div class="feature">PDF included</div>
+                        <div class="feature">Teaching included</div>
+                        <div class="feature">Guided setups</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary buy-now-btn" data-product="KingdomTraders Gold Strategy" data-price="$91.67" data-category="Strategy">Buy Now</button>
+                        <button class="btn-secondary details-btn" data-product="KingdomTraders Gold Strategy">View details</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-name="30 Profit PC Bots Bundle" data-price="167" data-category="bundle" data-original-index="7">
+                    <img src="assets/bot8.jpg" class="product-image" alt="30 Profit PC Bots Bundle" loading="lazy" decoding="async">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <div class="badge bg-[#EEF2FF] text-[#4338CA]">Elite Bundle</div>
+                        <div class="badge bg-[#E3F2FD] text-[#1565C0]"><i data-lucide="monitor" class="w-4 h-4"></i> PC Bot</div>
+                    </div>
+                    <h3>30 Profit PC Bots Bundle</h3>
+                    <div class="product-price">$166.67</div>
+                    <p class="product-desc">Mix of 30 profitable bots for Forex, BTCUSD, and Gold.</p>
+                    <div class="feature-list">
+                        <div class="feature">30 Premium Bots</div>
+                        <div class="feature">Forex &amp; Crypto</div>
+                        <div class="feature">Gold Optimized</div>
+                        <div class="feature">Multi-strategy mix</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary buy-now-btn" data-product="30 Profit PC Bots Bundle" data-price="$166.67" data-category="Bundle">Buy Now</button>
+                        <button class="btn-secondary details-btn" data-product="30 Profit PC Bots Bundle">View details</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-name="KT Crown Scalper 1.0" data-price="56" data-category="strategy" data-original-index="8">
+                    <img src="assets/bot9.jpg" class="product-image" alt="KT Crown Scalper 1.0" loading="lazy" decoding="async">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <div class="badge bg-[#1E2C43] text-white">Elite Scalper</div>
+                        <div class="badge bg-[#E3F2FD] text-[#1565C0]"><i data-lucide="monitor" class="w-4 h-4"></i> PC Bot</div>
+                    </div>
+                    <h3>KT CROWN SCALPER 1.0</h3>
+                    <div class="product-price">$55.56</div>
+                    <p class="product-desc">Ultra-precision Crown Scalper for high-frequency gold and FX markets.</p>
+                    <div class="feature-list">
+                        <div class="feature">High-Frequency</div>
+                        <div class="feature">AI Entry Confirmation</div>
+                        <div class="feature">Gold &amp; FX</div>
+                        <div class="feature">Low Drawdown</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-primary buy-now-btn" data-product="KT CROWN SCALPER 1.0" data-price="$55.56" data-category="Strategy">Buy Now</button>
+                        <button class="btn-secondary details-btn" data-product="KT CROWN SCALPER 1.0">View details</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS with small Telegram source pills -->
+        <section class="px-6 py-16 bg-white border-t border-[#E6ECF2]">
+            <h2 class="section-title font-black text-[#16304F] tracking-brand">Real Trader Results</h2>
+            <p class="mt-4 text-[#6D7686] section-lead">
+                Direct Telegram feedback from our clients — unfiltered and authentic.
+            </p>
+
+            <div class="mt-8 inline-flex items-center gap-3 rounded-full bg-[#F6E9EA] px-5 py-3 text-[#B13B43] font-bold text-[16px] sm:text-[20px]">
+                ⭐⭐⭐⭐⭐ Rated 4.9/5
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <img src="assets/testimonial1.jpg" alt="Telegram client feedback 1" loading="lazy" decoding="async">
+                    <div class="telegram-source-pill">
+                        <!-- Telegram icon -->
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.54.26l.188-2.69 4.9-4.42c.214-.19-.046-.297-.334-.107l-6.06 3.82-2.61-.818c-.568-.178-.58-.568.118-.84l10.212-3.94c.473-.178.886.107.738.83z"/></svg>
+                        via Telegram
+                    </div>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <img src="assets/testimonial2.jpg" alt="Telegram client feedback 2" loading="lazy" decoding="async">
+                    <div class="telegram-source-pill">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.54.26l.188-2.69 4.9-4.42c.214-.19-.046-.297-.334-.107l-6.06 3.82-2.61-.818c-.568-.178-.58-.568.118-.84l10.212-3.94c.473-.178.886.107.738.83z"/></svg>
+                        via Telegram
+                    </div>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <img src="assets/testimonial3.jpg" alt="Telegram client feedback 3" loading="lazy" decoding="async">
+                    <div class="telegram-source-pill">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.54.26l.188-2.69 4.9-4.42c.214-.19-.046-.297-.334-.107l-6.06 3.82-2.61-.818c-.568-.178-.58-.568.118-.84l10.212-3.94c.473-.178.886.107.738.83z"/></svg>
+                        via Telegram
+                    </div>
+                </div>
+                <!-- Testimonial 4 -->
+                <div class="testimonial-card">
+                    <img src="assets/testimonial4.jpg" alt="Telegram client feedback 4" loading="lazy" decoding="async">
+                    <div class="telegram-source-pill">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.54.26l.188-2.69 4.9-4.42c.214-.19-.046-.297-.334-.107l-6.06 3.82-2.61-.818c-.568-.178-.58-.568.118-.84l10.212-3.94c.473-.178.886.107.738.83z"/></svg>
+                        via Telegram
+                    </div>
+                </div>
+                <!-- Testimonial 5 -->
+                <div class="testimonial-card">
+                    <img src="assets/testimonial5.jpg" alt="Telegram client feedback 5" loading="lazy" decoding="async">
+                    <div class="telegram-source-pill">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.54.26l.188-2.69 4.9-4.42c.214-.19-.046-.297-.334-.107l-6.06 3.82-2.61-.818c-.568-.178-.58-.568.118-.84l10.212-3.94c.473-.178.886.107.738.83z"/></svg>
+                        via Telegram
+                    </div>
+                </div>
+                <!-- Testimonial 6 -->
+                <div class="testimonial-card">
+                    <img src="assets/testimonial6.jpg" alt="Telegram client feedback 6" loading="lazy" decoding="async">
+                    <div class="telegram-source-pill">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.54.26l.188-2.69 4.9-4.42c.214-.19-.046-.297-.334-.107l-6.06 3.82-2.61-.818c-.568-.178-.58-.568.118-.84l10.212-3.94c.473-.178.886.107.738.83z"/></svg>
+                        via Telegram
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="px-6 py-16 bg-[#EEF3F8] border-t border-[#E6ECF2]">
+            <div class="rounded-[38px] bg-white p-8 shadow-soft border border-[#E6ECF2] text-center">
+                <h2 class="section-title font-black text-[#16304F] tracking-brand">Start automating today</h2>
+                <p class="mt-4 text-[#6D7686] section-lead">
+                    Access professional-grade trading bots and streamline your execution.
+                </p>
+                <div class="mt-8 flex flex-wrap justify-center gap-4">
+                    <a href="#catalog">
+                        <button class="bg-[#B13B43] text-white h-[66px] px-8 rounded-full text-[18px] sm:text-[22px] font-bold hover:opacity-[.93] transition-all hover:shadow-lg">
+                            Browse Bots
+                        </button>
+                    </a>
+                    <a href="#contact">
+                        <button class="bg-white border border-[#D8E0EA] h-[66px] px-8 rounded-full text-[18px] sm:text-[22px] font-bold text-[#16304F] hover:bg-[#F8FAFC] transition-all">
+                            Contact Us
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="px-6 py-20 bg-white border-t border-[#E6ECF2] scroll-mt-6">
+            <div class="inline-flex items-center gap-3 rounded-full bg-[#F6E9EA] px-6 py-4 text-[#B13B43] font-semibold text-[16px] sm:text-[22px]">
+                <i data-lucide="building-2"></i>
+                <span>About KingdomTraders</span>
+            </div>
+
+            <h2 class="mt-8 section-title font-black tracking-brand text-[#16304F]">
+                Built for modern automated trading
+            </h2>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+                <span class="mini-chip">Algorithmic focus</span>
+                <span class="mini-chip">Structured execution logic</span>
+                <span class="mini-chip">Multi-market tools</span>
+                <span class="mini-chip">Forex, indices, commodities</span>
+            </div>
+
+            <p class="mt-8 text-[#6D7686] section-lead">
+                Founded by quantitative traders and fintech engineers, KingdomTraders focuses on automation tools for forex and multi-asset trading.
+            </p>
+
+            <p class="mt-6 text-[#6D7686] section-lead">
+                Our goal is to help traders access structured, technology-driven execution systems with clear product information and dependable support.
+            </p>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="px-6 py-20 bg-[#EEF3F8] border-t border-[#E6ECF2] scroll-mt-6">
+            <div class="inline-flex items-center gap-3 rounded-full bg-[#EEF2FF] px-6 py-4 text-[#4338CA] font-semibold text-[16px] sm:text-[22px]">
+                <i data-lucide="message-square-more"></i>
+                <span>Contact</span>
+            </div>
+
+            <div class="mt-8 rounded-[38px] bg-white border border-[#E6ECF2] p-8 shadow-card">
+                <div class="text-[24px] sm:text-[28px] font-bold text-[#16304F]">Email</div>
+                <div class="mt-2 text-[#6D7686] text-[18px] sm:text-[22px] break-all">kingdomtradersofficial@gmail.com</div>
+
+                <div class="mt-10 text-[24px] sm:text-[28px] font-bold text-[#16304F]">Telegram</div>
+                <div class="mt-2 text-[#6D7686] text-[18px] sm:text-[22px]">
+                    <a href="https://t.me/kingdom_traders_official" target="_blank" class="text-[#0088cc] underline underline-offset-4 hover:text-[#0077b3] transition-colors font-semibold">
+                        @kingdom_traders_official
+                    </a>
+                </div>
+
+                <p class="mt-8 text-[#6D7686] text-[16px] sm:text-[18px] leading-[1.7]">
+                    For institutional licensing, demos, or API integration discussions, contact our team directly on Telegram or via email.
+                </p>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-[#050D18] text-white py-14 px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="text-[#D7E1F2] text-[17px] font-medium">© 2026 KingdomTraders — Premium automation.</div>
+
+                <div class="flex items-center gap-4">
+                    <a href="https://pin.it/62upu2wl5" target="_blank" class="w-[54px] h-[54px] rounded-full bg-white/10 flex items-center justify-center hover:bg-white/18 transition-all" aria-label="Pinterest">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.217-.937 1.407-5.965 1.407-5.965s-.36-.72-.36-1.781c0-1.669.968-2.916 2.171-2.916 1.024 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.17 1.777 2.17 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.223.083.344-.091.378-.293 1.194-.333 1.36-.052.22-.174.267-.401.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/kingdom__traders?igsh=MWdlNmtpeGN1aTQ3dg==" target="_blank" class="w-[54px] h-[54px] rounded-full bg-white/10 flex items-center justify-center hover:bg-white/18 transition-all" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <a href="https://youtube.com/@kingdomtraderofficial?si=IjtekLVMMuP8FJtA" target="_blank" class="w-[54px] h-[54px] rounded-full bg-white/10 flex items-center justify-center hover:bg-white/18 transition-all" aria-label="YouTube">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- FLOATING TELEGRAM BUTTON (fixed, outside .page) -->
+    <a href="https://t.me/kingdom_traders_official" target="_blank" class="floating-telegram" title="Contact us on Telegram">
+        <img src="assets/icon.jpg" class="w-10 h-10 rounded-full object-cover flex-shrink-0" alt="Telegram" loading="eager" />
+        <span>Telegram</span>
+    </a>
+
+    <!-- BUY MODAL -->
+    <div id="buyModal" class="modal-backdrop" aria-hidden="true">
+        <div class="modal-card">
+            <div class="modal-header px-5 sm:px-8 py-5 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 text-[#B13B43] font-bold text-[18px] sm:text-[22px]">
+                    <i data-lucide="credit-card"></i>
+                    <span>Buy Now</span>
+                </div>
+                <button id="closeBuyModal" class="h-11 w-11 rounded-full border border-[#E6ECF2] flex items-center justify-center text-[#16304F] bg-white hover:bg-[#F8FAFC] transition-colors" aria-label="Close buy modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div class="modal-body px-5 sm:px-8 py-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-[#F8FAFC] border border-[#E6ECF2] rounded-[24px] p-5">
+                        <div class="text-[#6D7686] text-[12px] font-bold uppercase tracking-[0.14em]">You are buying</div>
+                        <div id="modalProduct" class="mt-3 text-[#16304F] text-[20px] font-extrabold leading-tight">—</div>
+                    </div>
+                    <div class="bg-[#F8FAFC] border border-[#E6ECF2] rounded-[24px] p-5">
+                        <div class="text-[#6D7686] text-[12px] font-bold uppercase tracking-[0.14em]">Amount (USD)</div>
+                        <div id="modalAmount" class="mt-3 text-[#16304F] text-[20px] font-extrabold">—</div>
+                    </div>
+                    <div class="bg-[#F8FAFC] border border-[#E6ECF2] rounded-[24px] p-5">
+                        <div class="text-[#6D7686] text-[12px] font-bold uppercase tracking-[0.14em]">Category</div>
+                        <div id="modalCategory" class="mt-3 text-[#16304F] text-[20px] font-extrabold">—</div>
+                    </div>
+                </div>
+
+                <div class="buy-grid">
+                    <div class="pay-card">
+                        <div class="flex items-center gap-3 mb-2">
+                            <img src="assets/usdt-trc20-icon.jpg" alt="USDT TRC20" class="w-8 h-8 rounded-full object-cover" />
+                            <h3 class="text-[#16304F] font-extrabold text-[20px]">USDT TRC20</h3>
+                        </div>
+                        <p class="text-[#6D7686] mb-4 text-[15px]">Tron Network — Fast &amp; low fees</p>
+                        <div class="space-y-2 text-[#374151] text-[15px] sm:text-[17px]">
+                            <p>
+                                <span class="font-bold">Address:</span>
+                                <span class="break-all">TBTohQSY3MW7UksZjRGZ3NJUE7DEMuqdcL</span>
+                                <span class="copy-chip ml-2" data-copy="TBTohQSY3MW7UksZjRGZ3NJUE7DEMuqdcL">Copy</span>
+                            </p>
+                            <p><span class="font-bold">Network:</span> TRC20</p>
+                        </div>
+                        <p class="mt-4 text-[#6D7686] text-[15px] sm:text-[16px]">
+                            Send the USD amount in USDT. After sending, confirm via Telegram with your transaction ID.
+                        </p>
+                    </div>
+
+                    <div class="pay-card">
+                        <div class="flex items-center gap-3 mb-2">
+                            <img src="assets/usdt-bep20-icon.jpg" alt="USDT BEP20" class="w-8 h-8 rounded-full object-cover" />
+                            <h3 class="text-[#16304F] font-extrabold text-[20px]">USDT BEP20</h3>
+                        </div>
+                        <p class="text-[#6D7686] mb-4 text-[15px]">Binance Smart Chain — Low fees</p>
+                        <div class="space-y-2 text-[#374151] text-[15px] sm:text-[17px]">
+                            <p>
+                                <span class="font-bold">Address:</span>
+                                <span class="break-all">0x73A4A36755548e950c9635B499fa90E3E0655f89</span>
+                                <span class="copy-chip ml-2" data-copy="0x73A4A36755548e950c9635B499fa90E3E0655f89">Copy</span>
+                            </p>
+                            <p><span class="font-bold">Network:</span> BEP20 (BSC)</p>
+                        </div>
+                        <p class="mt-4 text-[#6D7686] text-[15px] sm:text-[16px]">
+                            Send the USD amount in USDT. After sending, confirm via Telegram with your transaction ID.
+                        </p>
+                    </div>
+                </div>
+
+                <button id="confirmTelegram" class="mt-6 w-full bg-[#0088cc] text-white rounded-full px-6 py-4 font-bold text-[17px] sm:text-[19px] hover:opacity-[.93] transition-all hover:shadow-lg hover:shadow-blue-500/25">
+                    <span class="flex items-center justify-center gap-2">
+                        <img src="assets/icon.jpg" class="w-[26px] h-[26px] rounded-full object-cover flex-shrink-0" alt="Icon" loading="eager" />
+                        Confirm Payment on Telegram
+                    </span>
+                </button>
+
+                <div class="mt-6 bg-[#F8FAFC] border border-[#E6ECF2] rounded-[28px] p-5 shadow-card">
+                    <div class="text-[#16304F] text-[22px] font-extrabold">Secure checkout</div>
+                    <p class="mt-2 text-[#6D7686] text-[16px] sm:text-[18px] leading-[1.7]">
+                        Make your crypto payment, send confirmation on Telegram, and we will deliver the product manually.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEGAL MODAL -->
+    <div id="legalModal" class="modal-backdrop" aria-hidden="true">
+        <div class="modal-card">
+            <div class="modal-header px-5 sm:px-8 py-5 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 text-[#B13B43] font-bold text-[18px] sm:text-[22px]">
+                    <i data-lucide="shield-alert"></i>
+                    <span>Legal Disclaimer &amp; Risk Warning</span>
+                </div>
+                <button id="closeLegal" class="h-11 w-11 rounded-full border border-[#E6ECF2] flex items-center justify-center text-[#16304F] bg-white hover:bg-[#F8FAFC] transition-colors" aria-label="Close legal modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div class="modal-body px-5 sm:px-8 py-6 space-y-5">
+                <div>
+                    <h3 class="mb-2">Forex &amp; CFD Trading Risk</h3>
+                    <p>
+                        Trading forex, CFDs, and related financial instruments involves a high level of risk and may not be suitable for all investors.
+                        The value of your investment can go up as well as down, and you may lose more than your initial deposit.
+                        You should never trade with money you cannot afford to lose.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="mb-2">Your Financial Decisions</h3>
+                    <p>
+                        KingdomTraders provides automated trading software tools only. We do not provide financial advice, investment recommendations,
+                        or portfolio management services. All trading decisions are made solely by you. You are entirely responsible for your own
+                        financial decisions and outcomes. Past performance of any bot or strategy does not guarantee future results.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="mb-2">Automated Software Disclaimer</h3>
+                    <p>
+                        Our trading bots and EAs are software tools intended to assist with trade execution based on pre-set parameters.
+                        They do not guarantee profit. Market conditions change and no algorithm can predict the market.
+                        Always use proper risk management, including appropriate lot sizes and stop-loss settings.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="mb-2">Refund &amp; Exchange Policy — No Refunds</h3>
+                    <p>
+                        Due to the digital nature of our products, all sales are final — no refunds will be issued under any circumstances.
+                        If you are unhappy with a product, you may contact us via Telegram to arrange a product swap for another item of equal or lesser value.
+                        By purchasing any product from KingdomTraders, you confirm that you have read, understood, and agreed to this policy.
+                    </p>
+                </div>
+
+                <div>
+                    <p>
+                        KingdomTraders is a software provider. We are not a licensed financial advisor, broker, or asset manager.
+                        Always consult a qualified financial professional before trading. Contact: kingdomtradersofficial@gmail.com
+                    </p>
+                </div>
+
+                <div class="pt-2 pb-2 flex justify-end">
+                    <button id="acceptLegal" class="bg-[#B13B43] text-white rounded-full px-6 py-4 font-bold text-[16px] sm:text-[18px] hover:opacity-[.93] transition-all hover:shadow-lg">
+                        I Understand &amp; Accept
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const productsGrid = document.getElementById('productsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categorySelect = document.getElementById('categorySelect');
+        const sortSelect = document.getElementById('sortSelect');
+        const filterPills = Array.from(document.querySelectorAll('.filter-pill'));
+
+        const legalModal = document.getElementById('legalModal');
+        const openLegal = document.getElementById('openLegal');
+        const closeLegal = document.getElementById('closeLegal');
+        const acceptLegal = document.getElementById('acceptLegal');
+
+        const buyModal = document.getElementById('buyModal');
+        const closeBuyModal = document.getElementById('closeBuyModal');
+        const modalProduct = document.getElementById('modalProduct');
+        const modalAmount = document.getElementById('modalAmount');
+        const modalCategory = document.getElementById('modalCategory');
+        const confirmTelegramBtn = document.getElementById('confirmTelegram');
+
+        let activeCategory = 'all';
+        let currentBuyProduct = null;
+
+        const allProductCards = Array.from(document.querySelectorAll('.product-card'));
+        const originalOrder = [...allProductCards];
+
+        const perfConfigs = [
+            { win: 82, meta: '90-day performance', line: 'M0,68 C30,66 44,60 64,61 C84,62 98,55 118,49 C138,43 154,50 170,39 C188,28 204,34 224,22 C246,10 272,14 320,8' },
+            { win: 79, meta: '90-day performance', line: 'M0,70 C24,69 42,64 62,63 C82,62 98,52 118,46 C138,40 152,44 172,35 C192,26 212,29 232,19 C254,9 284,15 320,8' },
+            { win: 84, meta: '90-day performance', line: 'M0,72 C26,70 42,67 60,60 C82,52 96,56 112,45 C130,33 150,39 168,31 C188,22 206,26 228,16 C252,6 282,12 320,8' },
+            { win: 76, meta: '90-day performance', line: 'M0,71 C24,69 40,66 58,64 C76,62 92,58 110,54 C128,49 144,42 160,38 C180,33 198,30 216,22 C244,13 272,17 320,8' },
+            { win: 88, meta: '90-day performance', line: 'M0,69 C22,67 44,63 62,61 C84,58 98,49 118,43 C136,37 150,41 168,32 C188,22 208,25 228,15 C252,6 276,9 320,8' },
+            { win: 81, meta: '90-day performance', line: 'M0,70 C24,70 40,66 58,63 C78,60 94,55 112,49 C132,43 148,47 168,37 C188,27 210,30 232,20 C256,10 286,13 320,8' },
+            { win: 77, meta: '90-day performance', line: 'M0,73 C26,71 42,68 62,66 C82,63 96,58 114,54 C136,49 152,45 170,39 C190,32 206,27 226,19 C252,11 282,16 320,8' },
+            { win: 85, meta: '90-day performance', line: 'M0,69 C24,66 40,64 58,61 C78,57 96,50 114,44 C134,38 148,42 166,33 C188,23 208,27 228,18 C252,8 282,11 320,8' },
+            { win: 80, meta: '90-day performance', line: 'M0,72 C24,69 42,66 62,64 C82,62 98,56 116,48 C136,41 150,45 170,36 C190,26 210,30 230,21 C252,11 280,14 320,8' }
+        ];
+
+        function buildPerfMarkup(cfg) {
+            return `
+                <div class="perf-block">
+                    <div class="perf-top">
+                        <div class="perf-badge">
+                            <span class="perf-dot"></span>
+                            <span>${cfg.win}% Win Rate</span>
+                        </div>
+                        <div class="perf-meta">${cfg.meta}</div>
+                    </div>
+                    <svg class="perf-chart" viewBox="0 0 320 90" preserveAspectRatio="none" aria-hidden="true">
+                        <path class="perf-area" d="${cfg.line} L320,90 L0,90 Z"></path>
+                        <path class="perf-line" d="${cfg.line}"></path>
+                    </svg>
+                </div>
+            `;
+        }
+
+        function injectPerformanceBlocks() {
+            allProductCards.forEach((card, index) => {
+                if (card.querySelector('.perf-block')) return;
+                const desc = card.querySelector('.product-desc');
+                if (!desc) return;
+                const cfg = perfConfigs[index % perfConfigs.length];
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = buildPerfMarkup(cfg).trim();
+                desc.insertAdjacentElement('afterend', wrapper.firstElementChild);
+            });
+        }
+
+        injectPerformanceBlocks();
+
+        function showLegal() {
+            legalModal.classList.add('show');
+            legalModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideLegal() {
+            legalModal.classList.remove('show');
+            legalModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        function showBuyModal({ product, price, category }) {
+            currentBuyProduct = { product, price, category };
+            modalProduct.textContent = product || '—';
+            modalAmount.textContent = price || '—';
+            modalCategory.textContent = category || '—';
+            buyModal.classList.add('show');
+            buyModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideBuyModal() {
+            buyModal.classList.remove('show');
+            buyModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            currentBuyProduct = null;
+        }
+
+        function updateFilterPills(categoryValue) {
+            filterPills.forEach(p => {
+                p.classList.toggle('active', p.dataset.category === categoryValue);
+            });
+        }
+
+        function applyFilters() {
+            const query = (searchInput.value || '').trim().toLowerCase();
+            const category = categorySelect.value;
+            activeCategory = category;
+            const sort = sortSelect.value;
+
+            let visibleCards = allProductCards.filter(card => {
+                const name = (card.dataset.name || '').toLowerCase();
+                const cat = (card.dataset.category || '').toLowerCase();
+                const matchesSearch = !query || name.includes(query);
+                const matchesCategory = category === 'all' || cat === category;
+                return matchesSearch && matchesCategory;
+            });
+
+            if (sort === 'price-asc') {
+                visibleCards.sort((a, b) => (Number(a.dataset.price) || 0) - (Number(b.dataset.price) || 0));
+            } else if (sort === 'price-desc') {
+                visibleCards.sort((a, b) => (Number(b.dataset.price) || 0) - (Number(a.dataset.price) || 0));
+            } else if (sort === 'name-asc') {
+                visibleCards.sort((a, b) => {
+                    const nameA = (a.dataset.name || '').toLowerCase();
+                    const nameB = (b.dataset.name || '').toLowerCase();
+                    return nameA.localeCompare(nameB);
+                });
+            } else if (sort === 'featured') {
+                visibleCards.sort((a, b) => {
+                    const idxA = originalOrder.indexOf(a);
+                    const idxB = originalOrder.indexOf(b);
+                    return idxA - idxB;
+                });
+            }
+
+            allProductCards.forEach(card => card.classList.add('hidden-card'));
+
+            visibleCards.forEach(card => {
+                card.classList.remove('hidden-card');
+                productsGrid.appendChild(card);
+            });
+
+            updateFilterPills(activeCategory);
+        }
+
+        searchInput.addEventListener('input', applyFilters);
+
+        categorySelect.addEventListener('change', function() {
+            activeCategory = this.value;
+            updateFilterPills(activeCategory);
+            applyFilters();
+        });
+
+        sortSelect.addEventListener('change', applyFilters);
+
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', function() {
+                const newCat = this.dataset.category;
+                if (categorySelect.value !== newCat) {
+                    categorySelect.value = newCat;
+                }
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            const buyBtn = e.target.closest('.buy-now-btn');
+            if (buyBtn) {
+                showBuyModal({
+                    product: buyBtn.dataset.product,
+                    price: buyBtn.dataset.price,
+                    category: buyBtn.dataset.category
+                });
+                return;
+            }
+
+            const detailsBtn = e.target.closest('.details-btn');
+            if (detailsBtn) {
+                const targetName = detailsBtn.dataset.product;
+                const match = allProductCards.find(c => c.dataset.name === targetName);
+                if (match) {
+                    const wasHidden = match.classList.contains('hidden-card');
+                    if (wasHidden) match.classList.remove('hidden-card');
+                    match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    if (wasHidden) {
+                        setTimeout(applyFilters, 600);
+                    }
+                    match.style.boxShadow = '0 0 0 4px rgba(177,59,67,.35)';
+                    match.style.borderColor = '#B13B43';
+                    setTimeout(() => {
+                        match.style.boxShadow = '';
+                        match.style.borderColor = '';
+                    }, 1500);
+                }
+                return;
+            }
+
+            const copyChip = e.target.closest('.copy-chip');
+            if (copyChip) {
+                const textToCopy = copyChip.dataset.copy;
+                if (textToCopy && navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyChip.textContent = 'Copied!';
+                        copyChip.classList.add('copied');
+                        setTimeout(() => {
+                            copyChip.textContent = 'Copy';
+                            copyChip.classList.remove('copied');
+                        }, 1800);
+                    }).catch(() => {
+                        copyChip.textContent = 'Failed';
+                        setTimeout(() => { copyChip.textContent = 'Copy'; }, 1500);
+                    });
+                }
+            }
+        });
+
+        confirmTelegramBtn.addEventListener('click', function() {
+            if (currentBuyProduct) {
+                const msg = encodeURIComponent(
+                    `Hi KingdomTraders, I want to buy "${currentBuyProduct.product}" (${currentBuyProduct.price}). Here is my payment confirmation.`
+                );
+                window.open(`https://t.me/kingdom_traders_official?text=${msg}`, '_blank');
+            } else {
+                window.open('https://t.me/kingdom_traders_official', '_blank');
+            }
+        });
+
+        openLegal.addEventListener('click', showLegal);
+        closeLegal.addEventListener('click', hideLegal);
+        acceptLegal.addEventListener('click', hideLegal);
+
+        closeBuyModal.addEventListener('click', hideBuyModal);
+
+        legalModal.addEventListener('click', function(e) {
+            if (e.target === legalModal) hideLegal();
+        });
+        buyModal.addEventListener('click', function(e) {
+            if (e.target === buyModal) hideBuyModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (legalModal.classList.contains('show')) hideLegal();
+                if (buyModal.classList.contains('show')) hideBuyModal();
+            }
+        });
+
+        updateFilterPills('all');
+        applyFilters();
+
+        setTimeout(() => lucide.createIcons(), 100);
+    </script>
+</body>
+</html>
